@@ -1,5 +1,6 @@
 import React from 'react';
 import Service from '../../Services/Services';
+import AddSub from '../AddSub/AddSub';
 
 
 export default class SubList extends React.Component{
@@ -9,6 +10,17 @@ export default class SubList extends React.Component{
     state = {
         itemList: null
     };
+
+    
+
+    createItemData(title) {
+        let genId = this.state.itemList.length;
+        return{
+            id:++genId,
+            title
+        };
+           };
+
 
     componentDidMount(){
         this.updateSub();
@@ -23,11 +35,22 @@ export default class SubList extends React.Component{
         })
     }
 
+    addItm = (title) => {
+        this.setState(({ itemList }) => {
+        
+            const newArrSec = [...itemList
+                .concat(this.createItemData(title))
+            ];
+        
+            return{
+                itemList:newArrSec
+             };
+            });
+           };
 
     renderItems(data){
       
-        const {itemList} = this.state;
-        if (itemList !== null){
+        if (data !== null){
         return data.map((item)=>{
             return(
                 
@@ -39,17 +62,23 @@ export default class SubList extends React.Component{
         });
      }
     }
+    
+
 
 
     render(){
         const {itemList} = this.state;
 
         return(
-            
+            <div>
                 <ul>
                    {this.renderItems(itemList)}
                 </ul>
-            
+
+                <AddSub onAdd={this.addItm} 
+                itmText={'title'}
+                />
+            </div>
         );
     }
 } 
